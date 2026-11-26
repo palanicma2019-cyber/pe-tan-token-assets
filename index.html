@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<body style="text-align:center; padding-top:60px; font-family:sans-serif; background:#111; color:#fff;">
+  <button onclick="connectAndAdd()" style="font-size:22px; padding:18px 28px; border-radius:10px; background:#f6851b; color:#fff; border:none;">
+    Connect & Add TAN Logo
+  </button>
+  <p id="status" style="margin-top:24px; font-size:16px;"></p>
+
+  <script>
+    async function connectAndAdd() {
+      const status = document.getElementById('status');
+      try {
+        if (!window.ethereum) {
+          status.innerText = "Please open this link inside the MetaMask app browser.";
+          return;
+        }
+        status.innerText = "Connecting MetaMask...";
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+        status.innerText = "Opening Add Token prompt...";
+        await window.ethereum.request({
+          method: 'wallet_watchAsset',
+          params: {
+            type: 'ERC20',
+            options: {
+              address: '0x9228563139Ce05F0341182b2DA0cbe37202114A3',
+              symbol: 'TAN',
+              decimals: 18,
+              image: 'https://githubusercontent.com',
+            },
+          },
+        });
+        status.innerText = "Done! Check your MetaMask wallet.";
+      } catch (err) {
+        status.innerText = "Error: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
